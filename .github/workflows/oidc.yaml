@@ -47,6 +47,7 @@ permissions:
 jobs:
   get-sub:
     runs-on: ubuntu-latest
+    environment: testenv
     steps:
       - name: Print trigger
         run: |
