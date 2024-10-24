@@ -1,0 +1,52 @@
+name: Print OIDC sub claim
+
+on:
+  branch_protection_rule:
+  check_run:
+  check_suite:
+  create:
+  delete:
+  deployment:
+  deployment_status:
+  discussion:
+  discussion_comment:
+  fork:
+  gollum:
+  issue_comment:
+  issues:
+  label:
+  merge_group:
+  milestone:
+  page_build:
+  public:
+  pull_request:
+  pull_request_review:
+  pull_request_review_comment:
+  pull_request_target:
+  push:
+  registry_package:
+  release:
+  repository_dispatch:
+  schedule:
+    - cron: '20 19 * * *'
+  status:
+  watch:
+  workflow_call:
+  workflow_dispatch:
+  workflow_run:
+  
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  get-sub:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get sub
+        run: |
+          OIDC_TOKEN=$(curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=api://AzureADTokenExchange")
+          payload=$(echo "$OIDC_TOKEN" | cut -d '.' -f 2)
+          sub=$(echo "$payload" | base64 -d 2>/dev/null | jq -r '.sub')
+          echo "$sub"
