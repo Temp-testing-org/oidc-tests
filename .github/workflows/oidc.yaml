@@ -2,6 +2,9 @@ name: Print OIDC sub claim
 
 on:
   branch_protection_rule:
+    types:
+      - edited
+      - created
   check_run:
   check_suite:
   create:
